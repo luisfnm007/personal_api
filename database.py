@@ -1,10 +1,36 @@
 import sqlite3
+
 from models import Task
+
 
 def get_connection():
     connection = sqlite3.connect("database.db")
     connection.row_factory = sqlite3.Row
     return connection
+
+
+def init_database():
+    """Create the tasks table the first time the application starts."""
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """
+        CREATE TABLE IF NOT EXISTS tasks (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            description TEXT NOT NULL,
+            completed BOOLEAN NOT NULL DEFAULT 0
+        )
+        """
+    )
+
+    connection.commit()
+    connection.close()
+
+
+init_database()
+
 
 def get_tasks():
     connection = get_connection()
@@ -16,6 +42,7 @@ def get_tasks():
     connection.close()
 
     return [dict(row) for row in rows]
+
 
 def get_task(task_id: int):
     connection = get_connection()
@@ -31,37 +58,44 @@ def get_task(task_id: int):
 
     return dict(row)
 
+
 def add_task(new_task: Task):
     connection = get_connection()
     cursor = connection.cursor()
 
-    cursor.execute("""
+    cursor.execute(
+        """
     INSERT INTO tasks (name, description, completed)
     VALUES (?, ?, ?)
-    """, (new_task.name, new_task.description, new_task.completed))
+    """,
+        (new_task.name, new_task.description, new_task.completed),
+    )
 
     task_id = cursor.lastrowid
 
     connection.commit()
     connection.close()
 
-    return{
+    return {
         "id": task_id,
         "name": new_task.name,
         "description": new_task.description,
-        "completed": new_task.completed
+        "completed": new_task.completed,
     }
 
+
 def update_task(task_id: int, updated_task: Task):
-    connection=get_connection()
+    connection = get_connection()
     cursor = connection.cursor()
 
-    cursor.execute("""
+    cursor.execute(
+        """
     UPDATE tasks
     SET name = ?, description = ?, completed = ?
     WHERE id = ?
     """,
-    (updated_task.name, updated_task.description, updated_task.completed, task_id))
+        (updated_task.name, updated_task.description, updated_task.completed, task_id),
+    )
 
     connection.commit()
 
@@ -76,17 +110,21 @@ def update_task(task_id: int, updated_task: Task):
         "id": task_id,
         "name": updated_task.name,
         "description": updated_task.description,
-        "completed": updated_task.completed 
+        "completed": updated_task.completed,
     }
+
 
 def delete_task(task_id: int):
     connection = get_connection()
     cursor = connection.cursor()
 
-    cursor.execute("""
+    cursor.execute(
+        """
         DELETE FROM tasks
         WHERE id = ?
-    """, (task_id,))
+    """,
+        (task_id,),
+    )
 
     connection.commit()
 
@@ -98,4 +136,3 @@ def delete_task(task_id: int):
         return None
 
     return "Task deleted successfully"
-
