@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Personal API</title>
+    <style>
+      body {
+        background-color: #182b4c;
+
+        margin: 0;
+        /*100vh height occupies full page height*/
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      label {
+        color: white;
+      }
+
+      button {
+        /*
+        block converts the button into an independent 
+        "box" allowing it to occupy a full line
+        */
+        display: block;
+        margin: 0 auto;
+      }
+
+      h1,
+      h2 {
+        text-align: center;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Welcome</h1>
+      <h2>Create a task</h2>
+
+      <!--
+    <form> represents a document section that contains
+    a fields group that user completes to submit/send info
+    -->
+      <form action="">
+        <div class="field-group">
+          <!--
+        'for' and 'id' being the same allows the user to click on the label
+        -->
+          <label for="name">Name</label>
+          <input type="text" id="name" name="task_name" />
+        </div>
+
+        <div class="field-group">
+          <label for="description">Description</label>
+          <input type="text" id="description" name="task_description" />
+        </div>
+
+        <div class="field-group">
+          <label for="completed">Completed</label>
+          <input type="checkbox" id="completed" name="task_status" />
+        </div>
+
+        <button type="submit">Create</button>
+      </form>
+    </main>
+  </body>
+</html>
