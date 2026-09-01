@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import FileResponse
 
 import database
 from models import Task
@@ -10,7 +11,8 @@ app = FastAPI()
 
 @app.get("/")
 def home():
-    return {"message": "Mi Personal API esta funcionando"}
+    path = "templates/index.html"
+    return FileResponse(path, media_type="text/html")
 
 
 @app.get("/about")
