@@ -45,7 +45,7 @@
     <form> represents a document section that contains
     a fields group that user completes to submit/send info
     -->
-      <form action="">
+      <form id="task-form">
         <div class="field-group">
           <!--
         'for' and 'id' being the same allows the user to click on the label
@@ -69,53 +69,53 @@
         <dialog id="message-dialog">
           <h3>Message</h3>
           <p id="message-text"></p>
-          <button id="bttn-close">Close</button>
+          <button id="bttn-close" type="button">Close</button>
         </dialog>
-
-        <script>
-          const API_URL = "http://127.0.0.1:8000";
-          const dialog = document.getElementById("message-dialog");
-          const bttn_close = document.getElementById("bttn-close");
-          const dialog_message = document.getElementById("message-text");
-
-          bttn_close.addEventListener("click", () => {
-            dialog.close();
-          });
-
-          document
-            .getElementById("create-task")
-            .addEventListener("click", async (event) => {
-              event.preventDefault();
-
-              const form = {
-                name: document.getElementById("name").value,
-                description: document.getElementById("description").value,
-                completed: document.getElementById("completed").checked,
-              };
-
-              try {
-                const response = await fetch(`${API_URL}/tasks/`, {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify(form),
-                });
-
-                if (!response.ok) {
-                  const error = await response.json();
-                  throw new Error(JSON.stringify(error));
-                }
-
-                dialog_message.textContent = "Task created successfully.";
-                dialog.showModal();
-              } catch (error) {
-                dialog_message.textContent = "Error while sending data.";
-                dialog.showModal();
-              }
-            });
-        </script>
       </form>
+
+      <script>
+        const API_URL = "http://127.0.0.1:8000";
+        const dialog = document.getElementById("message-dialog");
+        const bttn_close = document.getElementById("bttn-close");
+        const dialog_message = document.getElementById("message-text");
+
+        bttn_close.addEventListener("click", () => {
+          dialog.close();
+        });
+
+        document
+          .getElementById("task-form")
+          .addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const form = {
+              name: document.getElementById("name").value,
+              description: document.getElementById("description").value,
+              completed: document.getElementById("completed").checked,
+            };
+
+            try {
+              const response = await fetch(`${API_URL}/tasks/`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(form),
+              });
+
+              if (!response.ok) {
+                const error = await response.json();
+                throw new Error(JSON.stringify(error));
+              }
+
+              dialog_message.textContent = "Task created successfully.";
+              dialog.showModal();
+            } catch (error) {
+              dialog_message.textContent = "Error while sending data.";
+              dialog.showModal();
+            }
+          });
+      </script>
     </main>
   </body>
 </html>
