@@ -146,7 +146,21 @@
 
           for (const task of tasks) {
             const item = document.createElement("li");
-            item.textContent = task.name;
+
+            //"strong" gives the text importance by making it bold
+            //and tells the browser that the content is urgent
+            const name = document.createElement("strong");
+            name.textContent = task.name;
+            item.appendChild(name);
+
+            const desc = document.createElement("p");
+            desc.textContent = task.description;
+            item.appendChild(desc);
+
+            const status = document.createElement("span");
+            status.textContent = task.completed ? " ✅Completed" : " ⏳Pending";
+            desc.appendChild(status);
+
             tasksList.appendChild(item);
           }
         }
