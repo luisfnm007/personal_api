@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 
 import database
 from models import Task
@@ -7,6 +8,7 @@ from models import Task
 app = FastAPI()
 
 # ==================================
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 @app.get("/")
