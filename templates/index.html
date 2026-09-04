@@ -158,10 +158,32 @@
             desc.textContent = task.description;
             item.appendChild(desc);
 
-            const status = document.createElement("span");
-            status.textContent = task.completed ? " ✅Completed" : " ⏳Pending";
-            desc.appendChild(status);
+            if (!task.completed) {
+              const completed_bttn = document.createElement("button");
+              completed_bttn.type = "button";
+              completed_bttn.textContent = "Mark completed";
 
+              completed_bttn.addEventListener("click", async () => {
+                const response = await fetch(`${API_URL}/tasks/${task.id}`, {
+                  method: "PUT",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    name: task.name,
+                    description: task.description,
+                    completed: true,
+                  }),
+                });
+
+                if (!response.ok) {
+                  throw new Error("Copuld no complete task");
+                }
+
+                loadTasks();
+              });
+              item.appendChild(completed_bttn);
+            }
             tasksList.appendChild(item);
           }
         }
