@@ -3,6 +3,24 @@ const dialog = document.getElementById("message-dialog");
 const bttn_close = document.getElementById("bttn-close");
 const dialog_message = document.getElementById("message-text");
 
+async function getErrorMessage(response, fallbackMessage) {
+  try {
+    const data = await response.json();
+
+    if (Array.isArray(data.detail)) {
+      return data.detail[0].msg;
+    }
+
+    if (typeof data.detail === "string") {
+      return data.detail;
+    }
+  } catch {
+    return fallbackMessage;
+  }
+
+  return fallbackMessage;
+}
+
 bttn_close.addEventListener("click", () => {
   dialog.close();
 });
@@ -14,20 +32,6 @@ document
     const inputDesc = document.getElementById("description");
 
     event.preventDefault();
-
-    if (inputName.value.trim() === "") {
-      dialog_message.textContent = "Enter a name.";
-      inputName.focus();
-      dialog.showModal();
-      return;
-    }
-
-    if (inputDesc.value.trim() === "") {
-      dialog_message.textContent = "Enter a description.";
-      inputDesc.focus();
-      dialog.showModal();
-      return;
-    }
 
     const form = {
       name: inputName.value,
@@ -50,34 +54,40 @@ document
       });
 
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(JSON.stringify(error));
+        const message = await getErrorMessage(
+          response,
+          "Could not create the task."
+        );
+        throw new Error(message);
       }
 
-      dialog_message.textContent = "Task created successfully.";
-      dialog.showModal();
-      loadTasks();
+      await loadTasks();
     } catch (error) {
-      dialog_message.textContent = "Error while sending data.";
+      dialog_message.textContent = error.message;
       dialog.showModal();
     }
   });
 
 async function loadTasks() {
-  const response = await fetch(`${API_URL}/tasks/`);
+  try {
+    const response = await fetch(`${API_URL}/tasks/`);
 
-  if (!response.ok) {
-    throw new Error("Could not load tasks");
-  }
+    if (!response.ok) {
+      const message = await getErrorMessage(
+        response,
+        "Could not load tasks."
+      );
+      throw new Error(message);
+    }
 
-  //.json() returns the value (arr, string, number)
-  // represented in JSON that comes from the API response body
-  const tasks = await response.json(); //json represents an array in this case
+    //.json() returns the value (arr, string, number)
+    // represented in JSON that comes from the API response body
+    const tasks = await response.json(); //json represents an array in this case
 
-  const tasksList = document.getElementById("tasks-list");
-  tasksList.textContent = "";
+    const tasksList = document.getElementById("tasks-list");
+    tasksList.textContent = "";
 
-  for (const task of tasks) {
+    for (const task of tasks) {
     const item = document.createElement("li");
     item.className = task.completed ? "completed-task" : "pending-task";
 
@@ -105,45 +115,70 @@ async function loadTasks() {
       completed_bttn.textContent = "Mark completed";
 
       completed_bttn.addEventListener("click", async () => {
-        const response = await fetch(`${API_URL}/tasks/${task.id}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: task.name,
-            description: task.description,
-            completed: true,
-          }),
-        });
+        try {
+          const response = await fetch(`${API_URL}/tasks/${task.id}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              name: task.name,
+              description: task.description,
+              completed: true,
+            }),
+          });
 
-        if (!response.ok) {
-          throw new Error("Could not complete task");
+          if (!response.ok) {
+            const message = await getErrorMessage(
+              response,
+              "Could not complete the task."
+            );
+            throw new Error(message);
+          }
+
+          await loadTasks();
+        } catch (error) {
+          dialog_message.textContent = error.message;
+          dialog.showModal();
         }
-
-        loadTasks();
       });
       taskActions.appendChild(completed_bttn);
     }
 
     delete_bttn.addEventListener("click", async () => {
-      const response = await fetch(`${API_URL}/tasks/${task.id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      try {
+        const response = await fetch(`${API_URL}/tasks/${task.id}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
 
-      if (!response.ok) {
-        throw new Error("Can't delete task.");
+        if (!response.ok) {
+          const message = await getErrorMessage(
+            response,
+            "Could not delete the task."
+          );
+          throw new Error(message);
+        }
+
+        await loadTasks();
+      } catch (error) {
+        dialog_message.textContent = error.message;
+        dialog.showModal();
       }
-
-      loadTasks();
     });
 
     taskActions.appendChild(delete_bttn);
     item.appendChild(taskActions);
-    tasksList.appendChild(item);
+      tasksList.appendChild(item);
+    }
+  } catch (error) {
+    dialog_message.textContent =
+      error instanceof TypeError
+        ? "Could not connect to the API. Check that the server is running."
+        : error.message;
+    dialog.showModal();
   }
 }
 
