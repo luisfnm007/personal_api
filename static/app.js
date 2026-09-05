@@ -10,11 +10,28 @@ bttn_close.addEventListener("click", () => {
 document
   .getElementById("task-form")
   .addEventListener("submit", async (event) => {
+    const inputName = document.getElementById("name");
+    const inputDesc = document.getElementById("description");
+
     event.preventDefault();
 
+    if (inputName.value.trim() === "") {
+      dialog_message.textContent = "Enter a name.";
+      inputName.focus();
+      dialog.showModal();
+      return;
+    }
+
+    if (inputDesc.value.trim() === "") {
+      dialog_message.textContent = "Enter a description.";
+      inputDesc.focus();
+      dialog.showModal();
+      return;
+    }
+
     const form = {
-      name: document.getElementById("name").value,
-      description: document.getElementById("description").value,
+      name: inputName.value,
+      description: inputDesc.value,
       completed: false,
     };
 
