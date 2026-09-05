@@ -73,9 +73,13 @@ async function loadTasks() {
     desc.textContent = task.description;
     item.appendChild(desc);
 
+    const taskActions = document.createElement("div");
+    taskActions.className = "task-actions";
+
     const delete_bttn = document.createElement("button");
     delete_bttn.type = "button";
     delete_bttn.textContent = "Delete";
+    delete_bttn.className = "delete-button";
 
     if (!task.completed) {
       const completed_bttn = document.createElement("button");
@@ -101,7 +105,7 @@ async function loadTasks() {
 
         loadTasks();
       });
-      item.appendChild(completed_bttn);
+      taskActions.appendChild(completed_bttn);
     }
 
     delete_bttn.addEventListener("click", async () => {
@@ -119,7 +123,8 @@ async function loadTasks() {
       loadTasks();
     });
 
-    item.appendChild(delete_bttn);
+    taskActions.appendChild(delete_bttn);
+    item.appendChild(taskActions);
     tasksList.appendChild(item);
   }
 }
