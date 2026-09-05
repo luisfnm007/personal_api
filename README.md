@@ -1,17 +1,24 @@
 # Personal API
 
-A personal API in progress to centralize information from my digital life and, eventually, provide useful context to an AI agent.
+A personal API and small web interface to centralize information from my digital life and, eventually, provide useful context to an AI agent.
 
 This is also a hands-on learning project: I started from scratch with nearly every part of the stack, including Python, APIs, databases, HTML, and CSS.
 
-It currently supports creating, reading, updating, and deleting tasks stored in a SQLite database.
+It currently supports creating, viewing, completing, and deleting tasks stored in a SQLite database.
 
 ## Technologies
 
 - Python
 - FastAPI
 - SQLite
-- HTML & CSS
+- HTML, CSS & JavaScript
+
+## Current features
+
+- Create tasks from the web interface
+- View tasks
+- Mark tasks as completed
+- Delete tasks
 
 ## Run the project
 
