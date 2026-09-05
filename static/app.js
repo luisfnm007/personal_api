@@ -15,7 +15,7 @@ document
     const form = {
       name: document.getElementById("name").value,
       description: document.getElementById("description").value,
-      completed: document.getElementById("completed").checked,
+      completed: false,
     };
 
     try {
