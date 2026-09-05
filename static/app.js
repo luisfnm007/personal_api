@@ -62,6 +62,7 @@ async function loadTasks() {
 
   for (const task of tasks) {
     const item = document.createElement("li");
+    item.className = task.completed ? "completed-task" : "pending-task";
 
     //"strong" gives the text importance by making it bold
     //and tells the browser that the content is urgent

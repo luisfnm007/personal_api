@@ -71,7 +71,7 @@ input {
 }
 
 button {
-  background-color: rgb(81, 157, 92);
+  background-color: #9a7b50;
   border: 0;
   border-radius: 0.35rem;
   color: #dcddde;
@@ -103,6 +103,16 @@ li {
   color: rgb(197, 184, 161);
   margin-bottom: 1rem;
   padding: 1.25rem;
+}
+
+.completed-task {
+  background-color: #233020;
+  border-color: #6b9147;
+}
+
+.pending-task {
+  background-color: #382222;
+  border-color: #b85a5a;
 }
 
 li p {
