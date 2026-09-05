@@ -73,6 +73,10 @@ async function loadTasks() {
     desc.textContent = task.description;
     item.appendChild(desc);
 
+    const delete_bttn = document.createElement("button");
+    delete_bttn.type = "button";
+    delete_bttn.textContent = "Delete";
+
     if (!task.completed) {
       const completed_bttn = document.createElement("button");
       completed_bttn.type = "button";
@@ -99,6 +103,23 @@ async function loadTasks() {
       });
       item.appendChild(completed_bttn);
     }
+
+    delete_bttn.addEventListener("click", async () => {
+      const response = await fetch(`${API_URL}/tasks/${task.id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Can't delete task.");
+      }
+
+      loadTasks();
+    });
+
+    item.appendChild(delete_bttn);
     tasksList.appendChild(item);
   }
 }
