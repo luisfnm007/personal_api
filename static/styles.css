@@ -1,33 +1,100 @@
 body {
-  background-color: #182b4c;
-
+  background-color: #262626;
+  color: rgb(197, 184, 161);
   margin: 0;
   /*100vh height occupies full page height*/
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  font-family: Arial, sans-serif;
 }
 
-label {
-  color: white;
-}
-
-button {
-  /*
-  block converts the button into an independent 
-  "box" allowing it to occupy a full line
-  */
-  display: block;
-  margin: 0 auto;
+main {
+  box-sizing: border-box;
+  width: min(100%, 46rem);
+  padding: 3rem 1.25rem;
 }
 
 h1,
 h2 {
   text-align: center;
-  color: white;
+  color: rgb(197, 184, 161);
+}
+
+h1 {
+  margin: 0 0 2rem;
+}
+
+.task-panel {
+  background-color: #202020;
+  border: 1px solid #333333;
+  border-radius: 0.75rem;
+  box-sizing: border-box;
+  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+}
+
+.task-panel h2 {
+  margin-top: 0;
+}
+
+.field-group {
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+label,
+summary {
+  color: rgb(197, 184, 161);
+}
+
+input {
+  background-color: #2a2a2a;
+  border: 1px solid rgb(94, 94, 94);
+  border-radius: 0.35rem;
+  box-sizing: border-box;
+  color: rgb(197, 184, 161);
+  padding: 0.7rem;
+  width: 100%;
+}
+
+.checkbox-field {
+  align-items: center;
+  display: flex;
+  gap: 0.6rem;
+}
+
+.checkbox-field input {
+  width: auto;
+}
+
+button {
+  background-color: rgb(81, 157, 92);
+  border: 0;
+  border-radius: 0.35rem;
+  color: #dcddde;
+  cursor: pointer;
+  display: block;
+  font-weight: bold;
+  margin: 0 auto;
+  padding: 0.7rem 1rem;
+}
+
+details summary {
+  color: rgb(197, 184, 161);
+  cursor: pointer;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+#tasks-list {
+  margin: 1.25rem 0 0;
+  padding-left: 1.25rem;
 }
 
 li {
-  color: white;
+  color: rgb(197, 184, 161);
 }
